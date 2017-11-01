@@ -19,7 +19,7 @@ string GenerateForFile(const string filename)
 	for(int i=0; i<length; i++)
 	{
 		srand((int)time(NULL)+i);
-		key[i] = rand()%254+1;
+		key[i] = rand()%100+30;
 	}
 	return string(key);
 }

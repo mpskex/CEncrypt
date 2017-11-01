@@ -3,9 +3,9 @@
 #	2017/07/20
 
 ifeq ($(OS),Windows_NT)
-	EXECUTABLE=CEnrypt.exe
+	EXECUTABLE=CEncrypt.exe
 else
-	EXECUTABLE=CEnrypt.out
+	EXECUTABLE=CEncrypt.out
 endif
 
 SRC_PATH = src/
@@ -13,7 +13,7 @@ BIN_PATH = ./
 
 CC = gcc
 CXX = g++
-CXXFLAGS = -std=c++11  -Wall
+CXXFLAGS = -std=c++11  -Wall -g
 
 SRC = ${wildcard $(SRC_PATH)*.cpp}
 OBJ = ${patsubst %.cpp, %.o, $(SRC)}

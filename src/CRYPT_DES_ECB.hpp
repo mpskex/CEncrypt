@@ -12,6 +12,7 @@ public:
     int EncryptToFile(string M, string key);
     string DecryptFromFile(string Key);
     string EncryptToString(string M, string key);
+    string DecryptFromString(string cipher, string key);
 private:
     DES *des;
     BlockString *bs;

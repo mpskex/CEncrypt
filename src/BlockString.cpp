@@ -5,8 +5,8 @@ using namespace std;
 /** 
 *  工具函数：将char字符数组转为二进制 
 */  
-bitset<64> BlockString::StringToBitset(const string str)  
-{  
+bitset<64> BlockString::String8ToBitset(string str)  
+{
     bitset<64> bits;  
     for(int i=0; i<8; ++i)  
         for(int j=0; j<8; ++j)  
@@ -42,11 +42,18 @@ list<string> BlockString::Block(string str)
 
 string BlockString::deBlock(list<string> block)
 {
-    string temp; 
-    list<string>::iterator iter;    
+    char *str = new char [block.size() * 8 + 1];
+    list<string>::iterator iter;
+    int i = 0, j = 0;
     for(iter=block.begin();iter!=block.end();iter++)
     {
-        temp.append(*iter);
+        for(j=0; j<strlen(iter->c_str());j++)
+        {
+            str[8*i+j] = iter->c_str()[j];
+        }
+        i++;
     }
-    return temp;
+    string ret = string(str);
+    delete[] str;
+    return ret;
 }

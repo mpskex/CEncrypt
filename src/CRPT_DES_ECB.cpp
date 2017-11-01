@@ -1,4 +1,4 @@
-#include "DES_ECB.hpp"
+#include "CRYPT_DES_ECB.hpp"
 
 DES_ECB::DES_ECB(string filename)
 {
@@ -9,8 +9,8 @@ DES_ECB::DES_ECB(string filename)
 
 string DES_ECB::EncryptToString(string M, string key)
 {
-    cout << "Key is :" << key << endl;
-    list<string> blk_key = bs->Block(key);
+    cout << "Key is :\n" << key << endl;
+    list<string> blk_key = this->bs->Block(key);
     list<string> blk_M = bs->Block(M);
     list<string> blk_cipher = *(new list<string>);
     if(blk_M.size()!=blk_key.size())
@@ -27,13 +27,13 @@ string DES_ECB::EncryptToString(string M, string key)
     }
     string ret;
     return ret;
-}
+};
 
 int DES_ECB::EncryptToFile(string M, string key)
 {
     int ret = 0;
-    cout << "Key is :" << key << endl;
-    list<string> blk_key = bs->Block(key);
+    cout << "Key is :\n" << key << endl;
+    list<string> blk_key = this->bs->Block(key);
     list<string> blk_M = bs->Block(M);
     ofstream file1;
     file1.open(this->filename.c_str(), ios::binary | ios::out);
@@ -60,9 +60,9 @@ int DES_ECB::EncryptToFile(string M, string key)
 
 string DES_ECB::DecryptFromFile(string key)
 {
-    cout << "Key is :" << key << endl;
+    cout << "Key is :\n" << key << endl;
     bitset<64> buff;
-    list<string> blk_key = bs->Block(key);
+    list<string> blk_key = this->bs->Block(key);
     list<string> blk_cont = *(new list<string>);
     list<string>::iterator iter_key;
     fstream file1;
@@ -74,13 +74,46 @@ string DES_ECB::DecryptFromFile(string key)
         file1.read((char*)&buff, sizeof(buff));
         bitset<64> plain = des->decrypt(buff);
         char ctmp[8];int i = 0;
-        for(char *ptr=(char*)&plain; ptr<(void*)&plain+8; ptr++)
+        for(char *ptr=(char*)&plain; ptr<(char*)&plain+8; ptr++)
         {
             ctmp[i] = *ptr;
             i++;
         }
         blk_cont.push_back(ctmp);
         delete(this->des);
+    }
+    string temp = bs->deBlock(blk_cont);
+    return temp;
+}
+
+string DES_ECB::DecryptFromString(string cipher, string key)
+{
+    cout << "Key is :\n" << key << endl;
+    bitset<64> buff;
+    list<string> blk_cipher = this->bs->Block(cipher);
+    list<string> blk_key = this->bs->Block(key);
+    list<string> blk_cont = *(new list<string>);
+    list<string>::iterator iter_key;
+    list<string>::iterator iter_cipher;
+    fstream file1;
+    file1.open(this->filename.c_str(), ios::binary | ios::in);
+    iter_cipher = blk_cipher.begin();
+    for(iter_key=blk_key.begin();iter_key!=blk_key.end();iter_key++)
+    {
+
+        this->des = new DES(*iter_key);
+        buff = this->bs->String8ToBitset(*iter_cipher);
+        bitset<64> plain = des->decrypt(buff);
+        char ctmp[8];
+        int i = 0;
+        for(char *ptr=(char*)&plain; ptr<(char*)&plain+8; ptr++)
+        {
+            ctmp[i] = *ptr;
+            i++;
+        }
+        blk_cont.push_back(ctmp);
+        delete(this->des);
+        iter_cipher++;
     }
     string temp = bs->deBlock(blk_cont);
     return temp;

@@ -15,7 +15,7 @@ public:
     ~BlockString();
     list<string> Block(string str);
     string deBlock(list<string> block);
-    bitset<64>  StringToBitset(const string str);
+    bitset<64>  String8ToBitset(const string str);
 private:
 
 };

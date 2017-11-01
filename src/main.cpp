@@ -1,9 +1,10 @@
 
 //  DES encrypt and decrypt
 #include "DES.hpp"
-#include "DES_ECB.hpp"
+#include "CRYPT_DES_ECB.hpp"
 #include "KeyGen.hpp"
 #include "BlockString.hpp"
+#include "IO_File.hpp"
 using namespace std;
 
 //#define DEBUG
@@ -11,43 +12,35 @@ using namespace std;
 int main(int argc, char **argv)
 {
 #ifdef DEBUG
-
+	DES_ECB *d = new DES_ECB("out.txt");
+	string key = GenerateForFile("Makefile");
+	{
+		string buffer = fromFile("Makefile");
+		cout << "Read file:\n" << buffer << endl;
+		if(d->EncryptToFile(buffer, key)<0)
+		{
+				cout << "\tFailed to encrypt file!!" << endl;
+			return -1;
+		}
+	}
+	{
+		string buffer= fromFile("out.txt");
+		string out = d->DecryptFromString(buffer, key);
+		cout << "The output from file is: \n" << out << endl;
+	}
 #endif
 #ifndef DEBUG
 	DES_ECB *d = new DES_ECB("out.txt");
-
-	ifstream is ("Makefile", ios::binary | ios::in);
-	if (!is)
-	{
-		cerr << "Failed to open file!" << endl;
-		return -1;
-	}
-	// get length of file:
-	is.seekg (0, is.end);
-	int length = is.tellg();
-	is.seekg (0, is.beg);
-	char * buffer = new char [length];
-	cout << "Reading " << length << " characters... ";
-	// read data as a block:
-	is.read (buffer,length);
-	if (is)
-		cout << "all characters read successfully.";
-	else
-		cout << "error: only " << is.gcount() << " could be read";
-	is.close();
-	
-	
+	string buffer = fromFile("Makefile");
 	string key = GenerateForFile("Makefile");
-	if(d->EncryptToFile(string(buffer), key)<0)
+	if(d->EncryptToFile(buffer, key)<0)
 	{
 			cout << "\tFailed to encrypt file!!" << endl;
 		return -1;
 	}
-	string out = d->DecryptFromFile(
-		key);
-		cout << "The output from file is: \n" << out << endl;
+	string out = d->DecryptFromFile(key);
+	cout << "The output from file is: \n" << out << endl;
 	// ...buffer contains the entire file...
-	delete[] buffer;
-	return 0;
 #endif
+	return 0;
 }
