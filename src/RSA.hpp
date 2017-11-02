@@ -3,6 +3,11 @@
 #include <cmath>
 #include "CryptoMath.hpp"
 
+//  mpsk    Liu Fangrui
+//  Beijing University of Technology
+//  2017
+//  Under MIT Licence
+
 class RSA
 {
 public:

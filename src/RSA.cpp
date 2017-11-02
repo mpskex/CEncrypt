@@ -1,6 +1,11 @@
 #include "RSA.hpp"
 using namespace std;
 
+//  mpsk    Liu Fangrui
+//  Beijing University of Technology
+//  2017
+//  Under MIT Licence
+
 RSA::RSA(uint64_t seed)
 {
     this->primes = new vector<uint64_t>();
