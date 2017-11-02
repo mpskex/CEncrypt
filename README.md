@@ -10,4 +10,9 @@ Commen Encrypt Implemtation in Standard C++
     Author: SongLee  
     E-mail: lisong.shine@qq.com  
     Created Time: 2014年06月01日 星期日 19时46分32秒  
-    Personal Blog: http://songlee24.github.com  
+    Personal Blog: http://songlee24.github.com 
+
+>   File Name: Rsa.cpp
+    Author: 韩少军
+    E-mail: None
+    github: shaojunhan@github
