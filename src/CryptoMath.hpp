@@ -26,7 +26,7 @@ private:
 
 uint64_t CreatePrimeByTime(vector<uint64_t> &vec, uint64_t seed, uint64_t limit = 0xffffffff);
 bool IsPrime(uint64_t n);
-uint64_t ExtendEuclid(uint64_t m);
+uint64_t ExtendEuclid(uint64_t a, uint64_t b, int64_t *x, int64_t *y);
 //生成[ 0 , n ]的随机数
 uint64_t Random(uint64_t n);
 //快速计算 (a*b) % mod

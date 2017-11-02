@@ -5,6 +5,7 @@
 #include "BlockString.hpp"
 #include "IO_File.hpp"
 #include "CryptoMath.hpp"
+#include "RSA.hpp"
 #include <ctime>
 using namespace std;
 //#define DEBUG
@@ -47,13 +48,9 @@ int main(int argc, char **argv)
 #endif
 #ifdef TEST
 	//	整体维护这一个素数表
-	vector<uint64_t> primes;
-	uint64_t a = CreatePrimeByTime(primes, (uint64_t)time(NULL), 0xffff);
-	uint64_t b = CreatePrimeByTime(primes, (uint64_t)time(NULL), 0x1ffff);
-	cout << "The prime is \n" << a << endl;
-	cout << b << endl;
-	cout << "\n" << IsPrime(a)
-		<< "\t" << miller_rabin(a) << endl;
+	uint64_t seed = time(NULL);
+	RSA *rsa = new RSA(seed);
+	cout << (int64_t)rsa->GetPublicKey(2398) << endl;
 #endif
 	return 0;
 }

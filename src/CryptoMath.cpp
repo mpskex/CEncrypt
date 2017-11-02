@@ -56,10 +56,26 @@ bool IsPrime(uint64_t n)
 }
 
 //  扩展欧几里得
-uint64_t ExtendEuclid(uint64_t m, uint64_t n)
+//  ax = 1 (mod m)
+//  求x，即a与m的乘法逆元
+//  sa + tm = 1
+//  x = s (mod m)
+uint64_t ExtendEuclid(uint64_t a, uint64_t m, int64_t *s, int64_t *t)
 {
     
-}
+       if (a == 0){
+           *s = 0;
+           *t = 1;
+           return m;
+       }
+       int64_t x1, y1;
+       uint64_t gcd = ExtendEuclid(m%a, a, &x1, &y1);
+    
+       *s = y1 - (m/a) * x1;
+       *t = x1;
+    
+       return gcd;
+   }
 
 //  生成[ 0 , n ]的随机数
 uint64_t Random( uint64_t n )			
@@ -112,12 +128,12 @@ bool witness( uint64_t a, uint64_t n )
 		tem /= 2;
 		j++;
 	}
-	//将n-1拆分为a^r * s
-    //得到a^r mod n
+	//  将n-1拆分为a^r * s
+    //  得到a^r mod n
     uint64_t x = q_pow( a, tem, n ); 
-    //余数为1则为素数
+    //  余数为1则为素数
     if(x == 1 || x == n - 1) return true;	
-    //否则试验条件2看是否有满足的 j
+    //  否则试验条件2看是否有满足的 j
     while(j--) 
 	{
 		x = q_mul( x, x, n );
@@ -134,15 +150,15 @@ bool miller_rabin( uint64_t n )
 	if(n == 2)
 		return true;
 	if(n < 2 || n % 2 == 0)
-        //如果是2则是素数，如果<2或者是>2的偶数则不是素数
+        //  如果是2则是素数，如果<2或者是>2的偶数则不是素数
         return false;	
 
-    //做20次随机检验
+    //  做20次随机检验
     for(int i = 1; i <= 20; i++)  
 	{
-        //得到随机检验算子 a
+        //  得到随机检验算子 a
         uint64_t a = Random( n - 2 ) + 1; 
-        //用a检验n是否是素数
+        //  用a检验n是否是素数
         if(!witness( a, n ))	
 			return false;
 	}
