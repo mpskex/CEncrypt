@@ -11,6 +11,7 @@ using namespace std;
 //#define DEBUG
 //#define DEBUG_DES
 //#define DES
+//#define RSA
 #define TEST
 
 int main(int argc, char **argv)
@@ -46,11 +47,27 @@ int main(int argc, char **argv)
 	cout << "The output from file is: \n" << out << endl;
 	// ...buffer contains the entire file...
 #endif
+#ifdef RSA
+	//	整体维护这一个素数表
+	uint64_t seed = time(NULL);
+	RSA *rsa = new RSA(seed, 63);
+	uint64_t pkey = rsa->GetPublicKey();
+	uint64_t N = rsa->GetN();
+	uint64_t M = 5;
+	uint64_t cipher = rsa->encrypt(M, N, pkey);
+	cout << M <<endl;
+	cout << (int64_t)rsa->decrypt(cipher, N, 7) << endl;
+#endif
 #ifdef TEST
 	//	整体维护这一个素数表
 	uint64_t seed = time(NULL);
-	RSA *rsa = new RSA(seed);
-	cout << (int64_t)rsa->GetPublicKey(2398) << endl;
+	RSA *rsa = new RSA(seed, 61);
+	uint64_t skey = rsa->GetPublicKey();
+	uint64_t N = rsa->GetN();
+	uint64_t M = 244;
+	uint64_t cipher = rsa->encrypt(M, N, 61);
+	cout << "cipher is " << cipher << endl;
+	cout << (int64_t)rsa->decrypt(cipher, N, skey) << endl;
 #endif
 	return 0;
 }

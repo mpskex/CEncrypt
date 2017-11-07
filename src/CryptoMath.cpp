@@ -36,7 +36,6 @@ uint64_t CreatePrimeByTime(vector<uint64_t> &vec,
     }
     srand(seed);
     uint64_t temp = 0;
-    //  控制生成素数轮数
     temp = vec[rand()%vec.size()];
     return temp;
 }
