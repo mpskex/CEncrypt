@@ -1,22 +1,27 @@
-//  电子密码本
-//  ECB
 #pragma once
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <list>
 #include <bitset>
+
 #include "DES.hpp"
 #include "BlockString.hpp"
 
-class DES_ECB
+
+class DES_CFB
 {
 public:
-    DES_ECB(string filename);
-    //  Stable Functions deals with files
+    DES_CFB(string filename);
+
     int EncryptToFile(string M, string key);
     string DecryptFromFile(string Key);
-    //  Unstable Function
+
     string EncryptToString(string M, string key);
     string DecryptFromString(string cipher, string key);
 private:
     DES *des;
     BlockString *bs;
     string filename;
+    string IV;
 };
