@@ -185,9 +185,12 @@ bitset<64> DES::decrypt(bitset<64>& cipher)
     return plain;  
 }  
 
-DES::DES(string k)
+DES::DES(char key[8])
 { 
-    key = charToBitset(k.c_str());  
+    for(int i=0; i<8; i++)
+    {
+        this->key[i] = key[i];
+    }
     // 生成16个子密钥
     generateKeys();     
 }

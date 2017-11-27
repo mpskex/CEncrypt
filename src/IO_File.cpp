@@ -7,7 +7,7 @@ int toFile(const string filename, string ctnt)
 
 }
 
-string fromFile(const string filename)
+string fromFile(const string filename, int &len)
 {
     ifstream is (filename, ios::binary | ios::in);
 	if (!is)

@@ -24,20 +24,20 @@ int DES_CFB::EncryptToFile(string M, string key)
         realkey[i] = key[i];
     }
     //  split the plain text to blocks
-    list<string> blk_M = bs->Block(M);
+    list<BLK64> blk_M = bs->Block(M);
     ofstream file1;
     file1.open(this->filename.c_str(), ios::binary | ios::out);
     //  set the content to be encrypt
     //  Initiate with IV
     bitset<64> temp = des->charToBitset(this->IV.c_str());
     bitset<64> plain_M;
-    for(list<string>::iterator iter_M=blk_M.begin();
+    for(list<BLK64>::iterator iter_M=blk_M.begin();
         iter_M!=blk_M.end();
         iter_M++)
     {
         this->des = new DES(realkey);
         //  M string to bitset
-        plain_M = des->charToBitset(iter_M->c_str());
+        plain_M = des->charToBitset(iter_M->str);
         //  encrypt the temp string
         temp = des->encrypt(temp);
         //  bitwise xor operation
@@ -53,6 +53,7 @@ int DES_CFB::EncryptToFile(string M, string key)
 
 string DES_CFB::DecryptFromFile(string Key)
 {
+    int len = 0;
     char realkey[8];
     //  copy string by char
     for(int i=0; i<8; i++)
@@ -64,11 +65,11 @@ string DES_CFB::DecryptFromFile(string Key)
     //  Initiate temp with IV
     bitset<64> temp = des->charToBitset(this->IV.c_str());
     //  split the cipher to blocks
-    list<string> blk_cipher = this->bs->Block(fromFile(this->filename));
-    list<string> blk_cont = *(new list<string>);
+    list<BLK64> blk_cipher = this->bs->Block(fromFile(this->filename, len));
+    list<BLK64> blk_cont = *(new list<BLK64>);
     fstream file1;
     file1.open(this->filename.c_str(), ios::binary | ios::in);
-    for(list<string>::iterator iter_cipher=blk_cipher.begin();
+    for(list<BLK64>::iterator iter_cipher=blk_cipher.begin();
         iter_cipher!=blk_cipher.end();
         iter_cipher++)
     {
@@ -79,14 +80,14 @@ string DES_CFB::DecryptFromFile(string Key)
         //  encrypt temp to get the pair plain
         temp = des->encrypt(temp);
         bitset<64> plain = temp ^ buff; 
-        char ctmp[8];
+        BLK64 b;
         int i = 0;
         for(char *ptr=(char*)&plain; ptr<(char*)&plain+8; ptr++)
         {
-            ctmp[i] = *ptr;
+            b.str[i] = *ptr;
             i++;
         }
-        blk_cont.push_back(ctmp);
+        blk_cont.push_back(b);
         delete(this->des);
     }
     string tmp = bs->deBlock(blk_cont);

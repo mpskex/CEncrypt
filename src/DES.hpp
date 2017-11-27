@@ -11,7 +11,7 @@ using namespace std;
 class DES
 {
 public:
-    DES(string key);
+    DES(char key[8]);
     bitset<64> encrypt(bitset<64>& plain);
     bitset<64> decrypt(bitset<64>& cipher);
     bitset<64> charToBitset(const char s[8]);

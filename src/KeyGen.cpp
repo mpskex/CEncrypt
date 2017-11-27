@@ -1,7 +1,9 @@
 #include "KeyGen.hpp"
+static int offset = 0;
 
 string GenerateForFile(const string filename)
 {
+	offset += 1;
 	ifstream is (filename, ifstream::binary);
 	int length = 0;
 	if (is) {
@@ -19,7 +21,20 @@ string GenerateForFile(const string filename)
 	for(int i=0; i<length; i++)
 	{
 		srand((int)time(NULL)+i);
-		key[i] = rand()%100+30;
+		key[i] = (rand()+offset)%100+30;
+	}
+	return string(key);
+}
+
+string GenerateForString(string str)
+{
+	offset += 1;
+	int length = strlen(str.c_str());
+	char *key = new char [length];
+	for(int i=0; i<length; i++)
+	{
+		srand((int)time(NULL)+i);
+		key[i] = (rand()+offset)%100+30;
 	}
 	return string(key);
 }
