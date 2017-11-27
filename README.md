@@ -1,8 +1,11 @@
-# CEncrypt
+# CEncrypt++
 Commen Encrypt Implemtation in Standard C++
 ### Current Functional Module
     *   Key Generation
+    *   Block String
     *   DES basic
+    *   Triple DES (In main.cpp)
+    *   DES CFB Module
     *   DES ECB Module
     *   RSA 128 P/S Key
     
