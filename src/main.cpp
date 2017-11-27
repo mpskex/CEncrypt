@@ -49,13 +49,14 @@ int main(int argc, char **argv)
 		DES_ECB *ed = new DES_ECB("out_des_ecb.txt");
 		string ebuffer = fromFile("Makefile", len);
 		string ekey = GenerateForFile("Makefile");
-		if(ed->EncryptToFile(ebuffer, ekey)<0)
+		if (ed->EncryptToFile(ebuffer, ekey) < 0)
 		{
 			cout << "\tFailed to encrypt file!!" << endl;
 			return -1;
 		}
 		string eout = ed->DecryptFromFile(ekey);
-		cout << "The output from file is: \n" << eout << endl;
+		cout << "The output from file is: \n"
+			 << eout << endl;
 		cout << endl;
 	}
 #endif
@@ -70,7 +71,7 @@ int main(int argc, char **argv)
 		string tkey_1 = GenerateForFile("Makefile");
 		string tkey_2 = GenerateForFile("out_tdes_1.txt");
 		//	3DES-1
-		if(tdo->EncryptToFile(tbuffer, tkey_1)<0)
+		if (tdo->EncryptToFile(tbuffer, tkey_1) < 0)
 		{
 			cout << "\tFailed to encrypt file 1!!" << endl;
 			return -1;
@@ -79,20 +80,21 @@ int main(int argc, char **argv)
 		string tmid = tdo->DecryptFromFile(tkey_2);
 		//	3DES-3
 		string tkey_3 = GenerateForString(tmid);
-		if(tds->EncryptToFile(tmid, tkey_3)<0)
+		if (tds->EncryptToFile(tmid, tkey_3) < 0)
 		{
 			cout << "\tFailed to encrypt file 2!!" << endl;
 			return -1;
 		}
 
 		tmid = tds->DecryptFromFile(tkey_3);
-		if(tdt->EncryptToFile(tmid, tkey_2)<0)
+		if (tdt->EncryptToFile(tmid, tkey_2) < 0)
 		{
 			cout << "\tFailed to encrypt file 3!!" << endl;
 			return -1;
 		}
 		string tout = tdt->DecryptFromFile(tkey_1);
-		cout << "The output from file is: \n" << tout << endl;
+		cout << "The output from file is: \n"
+			 << tout << endl;
 		cout << endl;
 	}
 #endif
@@ -104,29 +106,58 @@ int main(int argc, char **argv)
 		string cbuffer = fromFile("Makefile", len);
 		string ckey = GenerateForFile("Makefile");
 		//string ckey = "thisiskey";
-		if(cd->EncryptToFile(cbuffer, ckey)<0)
+		if (cd->EncryptToFile(cbuffer, ckey) < 0)
 		{
-				cout << "\tFailed to encrypt file!!" << endl;
+			cout << "\tFailed to encrypt file!!" << endl;
 			return -1;
 		}
 		string c_out = cd->DecryptFromFile(ckey);
-		cout << "The output from file is: \n" << c_out << endl;
+		cout << "The output from file is: \n"
+			 << c_out << endl;
 		cout << endl;
 	}
 #endif
 #ifdef RSA_TEST
 	{
 		printf("-------------**RSA_SIM_TEST**-------------\n");
-		//	整体维护这一个素数表
+		int len = 0;
+		BLK64 b;
+		BlockString *bs = new BlockString();
+		
+		cout << "TESTING BLK2U64.." <<endl;
+		uint64_t t = 3151222;
+		BLK64 p = bs->U64ToBlock64(t);
+		uint64_t r = bs->Block64ToU64(p);
+		cout << r << endl;
+		
+		list<BLK64> l = *(new list<BLK64>());
+		list<BLK64>::iterator iter = *(new list<BLK64>::iterator());
 		uint64_t seed = time(NULL);
 		RSA *rsa = new RSA(seed, 61);
 		uint64_t skey = rsa->GetPublicKey();
 		uint64_t N = rsa->GetN();
-		uint64_t M = 244;
-		cout << "M is " << M << endl;
-		uint64_t cipher = rsa->encrypt(M, N, 61);
-		cout << "cipher is " << cipher << endl;
-		cout << (int64_t)rsa->decrypt(cipher, N, skey) << endl;
+		//	整体维护这一个素数表
+		string buffer = fromFile("Makefile", len);
+		cout << "cipher is "<< endl;
+		for (int i = 0; i < buffer.size(); i++)
+		{
+			uint64_t M = buffer[i];
+			cout << (char)M;
+			uint64_t cipher = rsa->encrypt(M, N, 61);
+			//cout << cipher << "\t";
+			b = bs->U64ToBlock64(cipher);
+			//cout << bs->Block64ToU64(b) << "\n";
+			l.push_back(b);
+		}
+		cout << endl;
+		cout << "=======M======" << endl;
+		for (iter = l.begin(); iter != l.end(); iter++)
+		{
+			uint64_t cipher = 0;
+			cipher = bs->Block64ToU64(*iter);
+			//cout << cipher << "\t";
+			cout << (char)rsa->decrypt(cipher, N, skey);
+		}
 		cout << endl;
 	}
 #endif

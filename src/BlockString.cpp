@@ -67,3 +67,23 @@ string BlockString::deBlock(list<BLK64> block)
     delete[] str;
     return ret;
 }
+
+uint64_t BlockString::Block64ToU64(BLK64 b)
+{
+    uint64_t m = 0;
+    for(int i=0; i<8; i++)
+    {
+        m += ((b.str[i] & 0xff) << (i*8));
+    }
+    return m;
+}
+
+BLK64 BlockString::U64ToBlock64(uint64_t m)
+{
+    BLK64 b;
+    for(int i=0; i<8; i++)
+    {
+        b.str[i] = (m >> (i*8)) & 0xff;
+    }
+    return b;
+}

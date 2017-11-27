@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cmath>
+#include <cstdint>
 #include "CryptoMath.hpp"
 
 //  mpsk    Liu Fangrui
